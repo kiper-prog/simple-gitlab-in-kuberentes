@@ -1,0 +1,47 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gitlab-config-claim
+  namespace: gitlab
+  annotations:
+    nfs.io/storage-path: "gitlab-config"
+spec:
+  storageClassName: nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Mi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gitlab-logs-claim
+  namespace: gitlab
+  annotations:
+    nfs.io/storage-path: "gitlab-logs"
+spec:
+  storageClassName: nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1G
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gitlab-data-claim
+  namespace: gitlab
+  annotations:
+    nfs.io/storage-path: "gitlab-data"
+spec:
+  storageClassName: nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3G

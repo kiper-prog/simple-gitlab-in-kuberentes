@@ -1,0 +1,8 @@
+spec:
+  ports:
+    - name: proxied-tcp-ssh
+      port: 2222
+      targetPort: 2222
+      protocol: TCP
+
+

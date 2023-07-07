@@ -1,0 +1,46 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gitlab-web-service
+  namespace: gitlab
+spec:
+  selector:
+    app: gitlab
+  ports:
+    - port: 80 
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gitlab-gitlab-shell
+  namespace: gitlab
+spec:
+  selector:
+    app: gitlab
+  ports:
+    - port: 2222
+      targetPort: 22
+      protocol: TCP
+      name: ssh
+
+
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: gitlab-gitlab-shell
+#   namespace: gitlab
+# spec:
+#   type: NodePort
+#   selector:
+#     app: gitlab
+#   ports:
+#     - port: 2222
+#       targetPort: 22
+#       protocol: TCP
+#       name: ssh
+#       nodePort: 32222
+
+    

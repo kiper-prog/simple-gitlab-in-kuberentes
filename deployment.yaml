@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-deployment
+  namespace: gitlab
+  labels:
+    app: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+      annotations:
+        pod.beta.kubernetes.io/hostname: kube-gitlab.local
+    spec:
+      tolerations:
+      - key: "kube-app"
+        operator: "Equal"
+        value: "gitlab"
+        effect: "NoSchedule"
+      hostname: kube-gitlab
+      subdomain: local
+      containers:
+      - name: gitlab
+        image: gitlab/gitlab-ce:16.0.6-ce.0
+        env:
+        - name: external_url
+          value: "http://kube-gitlab.local"
+        ports:
+        - containerPort: 80
+          name:  web
+        - containerPort: 22
+          name:  ssh
+        volumeMounts:
+          - name: gitlab-config
+            mountPath: "/etc/gitlab"
+          - name: gitlab-data
+            mountPath: "/var/opt/gitlab"
+          - name: gitlab-logs
+            mountPath: "/var/log/gitlab"
+        resources:
+            limits:
+              cpu: 3000m
+              memory: 3900Mi
+            requests:
+              cpu: 300m
+              memory: 300Mi
+
+      volumes:
+        - name: gitlab-data
+          persistentVolumeClaim:
+            claimName: gitlab-data-claim
+        - name: gitlab-logs
+          persistentVolumeClaim:
+            claimName: gitlab-logs-claim
+        - name: gitlab-config
+          persistentVolumeClaim:
+            claimName: gitlab-config-claim
+
+
